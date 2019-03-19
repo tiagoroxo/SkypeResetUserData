@@ -4,12 +4,6 @@
 ##Version: V1.1
 ##Author: Tiago Roxo
 ##
-##Description: This script Backups all the userdata, Policies, EV Config, and after that, deletes the account and restore it again with all the settings.
-##Intructions: 
-##  1. Run this script from a Front-End Server where we have all Skype for business Modules Loaded
-##  2. On the C:\ Drive create an folder called UserDataBackup
-##  3. Define the group of userd where you need this script to be executed.
-##
 ## ------------------------------------------
 
 Clear-Host
