@@ -1,7 +1,7 @@
 ## ------------------------------------------
 ##
 ##Script: ResetUserData Script 
-##Version: V1.1
+##Version: V1.2
 ##Author: Tiago Roxo
 ##
 ## ------------------------------------------
@@ -22,7 +22,16 @@ Function ResetUserData () {
     $hour = (get-date).hour
     $minute = (get-date).minute
     $second = (get-date).Second
+    
+    ##--Create folder
     $folder = "C:\UserDataBackup\"
+    if( -Not (Test-Path -Path $folder ) )
+    {
+        New-Item -ItemType directory -Path $folder
+        Write-Host "Creating folder" $folder -ForegroundColor Yellow -BackgroundColor DarkGreen
+    }else{
+
+    }
     $file = $folder+"ExportedUserData"+$user.SamAccountName.ToString() +$hour +$minute +$second +".zip"
  
     ##--START
@@ -99,5 +108,5 @@ Foreach ($id in $allusers){
      ResetUserData -identity $id
 }
 ##--Opens the Folder where the backups were saved.
-#explorer.exe $($folder)
+explorer.exe $($folder)
 Write-Host $allusers.count " Users analysed and proccessed."  -ForegroundColor White -BackgroundColor Green
