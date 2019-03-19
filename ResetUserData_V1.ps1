@@ -1,15 +1,14 @@
 ## ------------------------------------------
 ##
 ##Script: ResetUserData Script 
-##Version: V1
+##Version: V1.1
 ##Author: Tiago Roxo
 ##
-##Description: This script Backups all the userdata, Policies, EV Config, and after that, deletes the account and restore it again.
+##Description: This script Backups all the userdata, Policies, EV Config, and after that, deletes the account and restore it again with all the settings.
 ##Intructions: 
 ##  1. Run this script from a Front-End Server where we have all Skype for business Modules Loaded
 ##  2. On the C:\ Drive create an folder called UserDataBackup
 ##  3. Define the group of userd where you need this script to be executed.
-##  4. Run the following cmdlet: Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 ##
 ## ------------------------------------------
 
@@ -22,7 +21,7 @@ Function ResetUserData () {
          [string]$identity
          )
 
-    #VAR
+    ##--VAR
     $user = Get-CsUser -identity $identity
     $sip=$user.SipAddress.Substring(4)
 
@@ -32,25 +31,26 @@ Function ResetUserData () {
     $folder = "C:\UserDataBackup\"
     $file = $folder+"ExportedUserData"+$user.SamAccountName.ToString() +$hour +$minute +$second +".zip"
  
-    #START
-    #Check if users it's Hosted On-Premises or Online
+    ##--START
+    ##--Check if users it's Hosted On-Premises or Online
     if ($user.Enabled.ToString() -eq "True"){
         if ($user.HostingProvider.ToString() -ne "sipfed.online.lync.com")
         {
             Write-Host "Starting the procces for the account->"  $user.SipAddress.ToString() -ForegroundColor White -BackgroundColor Green
             Write-Host "Start Export-CsUserData for the user->" $user.SipAddress.ToString() "Hosted on Pool->" $user.RegistrarPool.ToString() -ForegroundColor Yellow -BackgroundColor DarkGreen
-            ##Uncomment the line below if you want to check user by user by pressing enter.
-            ##[void](Read-Host 'Press Enter to continue…')
+            ##--Uncomment the line below if you want to check user by user by pressing enter.
+            #[void](Read-Host 'Press Enter to continue…')
                 Export-CsUserData -PoolFqdn $user.RegistrarPool.ToString() -FileName $file -UserFilter $sip -Verbose
-            explorer.exe $($folder)
+
             Write-Host "Finished Export-CsUserData"
             Write-Host "loading..."
             Start-Sleep -s 5
             Write-Host "Start Disable-csuser for the user->" $user.SipAddress.ToString() -ForegroundColor Yellow -BackgroundColor DarkGreen
                 Disable-CsUser -Identity $sip -Verbose
+                invoke-csmanagementstorereplication
             Write-Host "Finished Disable-CsUser"
             Write-Host "loading..."
-            Start-Sleep -s 5
+            Start-Sleep -s 30
             Write-Host "Start Enable-CsUser->" $user.SipAddress.ToString() -ForegroundColor Yellow -BackgroundColor DarkGreen
                 Enable-CsUser -Identity $sip -RegistrarPool $user.RegistrarPool.ToString() -SipAddress $user.SipAddress.ToString() -Verbose
             Write-Host "Finished Enable-CsUser"
@@ -95,13 +95,15 @@ Function ResetUserData () {
     }
 }
 
-##!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
-##SPECIFY the group of users Where the script will be executed
-##!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
+##--!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
+##--SPECIFY the group of users Where the script will be executed
+##--!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
 $allusers = Get-CsUser
 Write-Host $allusers.count " Users found to be processed on this list"  -ForegroundColor Red -BackgroundColor Yellow
 [void](Read-Host 'Press Enter to Start…')
 Foreach ($id in $allusers){
      ResetUserData -identity $id
 }
+##--Opens the Folder where the backups were saved.
+#explorer.exe $($folder)
 Write-Host $allusers.count " Users analysed and proccessed."  -ForegroundColor White -BackgroundColor Green
