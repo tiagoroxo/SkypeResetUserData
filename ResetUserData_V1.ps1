@@ -68,23 +68,142 @@ Function ResetUserData () {
             Write-Host "-------------------------- USER DETAILS[BEFORE] --------------------------"
             Start-Sleep -s 5
             Write-Host "Start Restoring Policies"
-                Grant-CsClientPolicy -Identity $sip -PolicyName $user.Clientpolicy.toString()
-                Grant-CsVoicePolicy  -Identity $sip -PolicyName $user.VoicePolicy.toString()
-                Grant-CsVoiceRoutingPolicy -Identity $sip -PolicyName $user.VoiceRoutingPolicy.toString()
-                Grant-CsConferencingPolicy -Identity $sip -PolicyName $user.ConferencingPolicy.toString()
-                Grant-CsPresencePolicy -Identity $sip -PolicyName $user.PresencePolicy.toString()
-                Grant-CsDialPlan -Identity $sip -PolicyName $user.DialPlan.toString()
-                Grant-CsLocationPolicy -Identity $sip -PolicyName $user.LocationPolicy.toString()
-                Grant-CsClientVersionPolicy -Identity $sip -PolicyName $user.ClientVersionPolicy.toString()
-                Grant-CsArchivingPolicy -Identity $sip -PolicyName $user.ArchivingPolicy.toString()
-                Grant-CsUserServicesPolicy -Identity $sip -PolicyName $user.UserServicesPolicy.toString()
-                Grant-CsCallViaWorkPolicy -Identity $sip -PolicyName $user.CallViaWorkPolicy.toString()
-                Grant-CsThirdPartyVideoSystemPolicy -Identity $sip -PolicyName $user.ThirdPartyVideoSystemPolicy.toString()
-                Grant-CsMobilityPolicy -Identity $sip -PolicyName $user.MobilityPolicy.toString()
-                Grant-CsHostedVoicemailPolicy -Identity $sip -PolicyName $user.HostedVoicemailPolicy.toString()
-                Grant-CsTeamsUpgradePolicy -Identity $sip -PolicyName $user.TeamsUpgradePolicy.toString()
-                Grant-CsIPPhonePolicy  -Identity $sip -PolicyName $user.IPPhonePolicy.toString()
-                Set-CsUser –Identity $sip –LineUri $user.LineUri.toString() -EnterpriseVoiceEnabled $user.EnterpriseVoiceEnabled
+                try
+                {
+                    Grant-CsClientPolicy -Identity $sip -PolicyName $user.Clientpolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsClientPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.Clientpolicy.toString()
+                }
+                try
+                {
+                    Grant-CsVoicePolicy  -Identity $sip -PolicyName $user.VoicePolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsVoicePolicy  -Identity $user.SipAddress.ToString() -PolicyName $user.VoicePolicy.toString()
+                }
+                try
+                {
+                    Grant-CsVoiceRoutingPolicy -Identity $sip -PolicyName $user.VoiceRoutingPolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsVoiceRoutingPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.VoiceRoutingPolicy.toString()
+                }
+                try
+                {
+                    Grant-CsConferencingPolicy -Identity $sip -PolicyName $user.ConferencingPolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsConferencingPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.ConferencingPolicy.toString()
+                }
+                try
+                {
+                    Grant-CsPresencePolicy -Identity $sip -PolicyName $user.PresencePolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsPresencePolicy -Identity $user.SipAddress.ToString() -PolicyName $user.PresencePolicy.toString()
+                }
+                try
+                {
+                    Grant-CsDialPlan -Identity $sip -PolicyName $user.DialPlan.toString()
+                }
+                catch
+                {
+                    Grant-CsDialPlan -Identity $user.SipAddress.ToString() -PolicyName $user.DialPlan.toString()
+                }
+                try
+                {
+                    Grant-CsLocationPolicy -Identity $sip -PolicyName $user.LocationPolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsLocationPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.LocationPolicy.toString()
+                }
+                 try
+                {
+                    Grant-CsClientVersionPolicy -Identity $sip -PolicyName $user.ClientVersionPolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsClientVersionPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.ClientVersionPolicy.toString()
+                }
+                try
+                {
+                    Grant-CsArchivingPolicy -Identity $sip -PolicyName $user.ArchivingPolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsArchivingPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.ArchivingPolicy.toString()
+                }
+                try
+                {
+                    Grant-CsUserServicesPolicy -Identity $sip -PolicyName $user.UserServicesPolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsUserServicesPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.UserServicesPolicy.toString()
+                }
+                try
+                {
+                    Grant-CsCallViaWorkPolicy -Identity $sip -PolicyName $user.CallViaWorkPolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsCallViaWorkPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.CallViaWorkPolicy.toString()
+                }
+                try
+                {
+                    Grant-CsThirdPartyVideoSystemPolicy -Identity $sip -PolicyName $user.ThirdPartyVideoSystemPolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsThirdPartyVideoSystemPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.ThirdPartyVideoSystemPolicy.toString()
+                }
+                try
+                {
+                    Grant-CsMobilityPolicy -Identity $sip -PolicyName $user.MobilityPolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsMobilityPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.MobilityPolicy.toString()
+                }
+                try
+                {
+                    Grant-CsHostedVoicemailPolicy -Identity $sip -PolicyName $user.HostedVoicemailPolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsHostedVoicemailPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.HostedVoicemailPolicy.toString()
+                }
+                try
+                {
+                    Grant-CsTeamsUpgradePolicy -Identity $sip -PolicyName $user.TeamsUpgradePolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsTeamsUpgradePolicy -Identity $user.SipAddress.ToString() -PolicyName $user.TeamsUpgradePolicy.toString()
+                }
+                 try
+                {
+                    Grant-CsIPPhonePolicy  -Identity $sip -PolicyName $user.IPPhonePolicy.toString()
+                }
+                catch
+                {
+                    Grant-CsIPPhonePolicy  -Identity $user.SipAddress.ToString() -PolicyName $user.IPPhonePolicy.toString()
+                }
+                 try
+                {
+                    Set-CsUser –Identity $sip –LineUri $user.LineUri.toString() -EnterpriseVoiceEnabled $user.EnterpriseVoiceEnabled
+                }
+                catch
+                {
+                    Set-CsUser –Identity $user.SipAddress.ToString() –LineUri $user.LineUri.toString() -EnterpriseVoiceEnabled $user.EnterpriseVoiceEnabled
+                }
             Write-Host "-------------------------- USER DETAILS[AFTER] --------------------------"
             Get-csuser -Identity $identity
             Write-Host "-------------------------- USER DETAILS[AFTER] --------------------------"
