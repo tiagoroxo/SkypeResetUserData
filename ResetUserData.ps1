@@ -256,7 +256,7 @@ Function ResetUserData () {
 ##--!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
 ##--SPECIFY the group of users Where the script will be executed
 ##--!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
-$allusers = Get-CsUser -Identity tiroxo@uc-pm.net
+$allusers = Get-CsUser
 Write-Host $allusers.count " Users found to be processed on this list"  -ForegroundColor Red -BackgroundColor Yellow
 [void](Read-Host 'Press Enter to Start…')
 Foreach ($id in $allusers){
