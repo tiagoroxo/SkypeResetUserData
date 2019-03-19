@@ -8,6 +8,7 @@
 
 Clear-Host
 
+##-- FUNCTION START
 Function ResetUserData () {
  [CmdletBinding()]
     param(
@@ -67,10 +68,12 @@ Function ResetUserData () {
             Get-csuser -Identity $identity
             Write-Host "-------------------------- USER DETAILS[BEFORE] --------------------------"
             Start-Sleep -s 5
-            Write-Host "Start Restoring Policies"
+            Write-Host "Start Restoring Policies" -ForegroundColor Yellow -BackgroundColor DarkGreen
                 try
                 {
+                    if ($user.Clientpolicy){
                     Grant-CsClientPolicy -Identity $sip -PolicyName $user.Clientpolicy.toString()
+                    }
                 }
                 catch
                 {
@@ -78,15 +81,19 @@ Function ResetUserData () {
                 }
                 try
                 {
-                    Grant-CsVoicePolicy  -Identity $sip -PolicyName $user.VoicePolicy.toString()
+                    if ($user.VoicePolicy){
+                    Grant-CsVoicePolicy -Identity $sip -PolicyName $user.VoicePolicy.toString()
+                    }
                 }
                 catch
                 {
-                    Grant-CsVoicePolicy  -Identity $user.SipAddress.ToString() -PolicyName $user.VoicePolicy.toString()
+                    Grant-CsVoicePolicy -Identity $user.SipAddress.ToString() -PolicyName $user.VoicePolicy.toString()
                 }
                 try
                 {
+                    if ($user.VoiceRoutingPolicy){
                     Grant-CsVoiceRoutingPolicy -Identity $sip -PolicyName $user.VoiceRoutingPolicy.toString()
+                    }
                 }
                 catch
                 {
@@ -94,7 +101,9 @@ Function ResetUserData () {
                 }
                 try
                 {
+                    if ($user.ConferencingPolicy){
                     Grant-CsConferencingPolicy -Identity $sip -PolicyName $user.ConferencingPolicy.toString()
+                    }
                 }
                 catch
                 {
@@ -102,7 +111,9 @@ Function ResetUserData () {
                 }
                 try
                 {
+                    if ($user.PresencePolicy){
                     Grant-CsPresencePolicy -Identity $sip -PolicyName $user.PresencePolicy.toString()
+                    }
                 }
                 catch
                 {
@@ -110,7 +121,9 @@ Function ResetUserData () {
                 }
                 try
                 {
+                    if ($user.DialPlan){
                     Grant-CsDialPlan -Identity $sip -PolicyName $user.DialPlan.toString()
+                    }
                 }
                 catch
                 {
@@ -118,7 +131,9 @@ Function ResetUserData () {
                 }
                 try
                 {
+                    if ($user.LocationPolicy){
                     Grant-CsLocationPolicy -Identity $sip -PolicyName $user.LocationPolicy.toString()
+                    }
                 }
                 catch
                 {
@@ -126,39 +141,49 @@ Function ResetUserData () {
                 }
                  try
                 {
+                    if ($user.ClientVersionPolicy){
                     Grant-CsClientVersionPolicy -Identity $sip -PolicyName $user.ClientVersionPolicy.toString()
+                    }
                 }
                 catch
                 {
                     Grant-CsClientVersionPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.ClientVersionPolicy.toString()
                 }
-                try
+                 try
                 {
+                    if ($user.ArchivingPolicy){
                     Grant-CsArchivingPolicy -Identity $sip -PolicyName $user.ArchivingPolicy.toString()
+                    }
                 }
                 catch
                 {
                     Grant-CsArchivingPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.ArchivingPolicy.toString()
                 }
-                try
+                 try
                 {
+                    if ($user.UserServicesPolicy){
                     Grant-CsUserServicesPolicy -Identity $sip -PolicyName $user.UserServicesPolicy.toString()
+                    }
                 }
                 catch
                 {
                     Grant-CsUserServicesPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.UserServicesPolicy.toString()
                 }
-                try
+                 try
                 {
+                    if ($user.CallViaWorkPolicy){
                     Grant-CsCallViaWorkPolicy -Identity $sip -PolicyName $user.CallViaWorkPolicy.toString()
+                    }
                 }
                 catch
                 {
                     Grant-CsCallViaWorkPolicy -Identity $user.SipAddress.ToString() -PolicyName $user.CallViaWorkPolicy.toString()
                 }
-                try
+                  try
                 {
+                    if ($user.ThirdPartyVideoSystemPolicy){
                     Grant-CsThirdPartyVideoSystemPolicy -Identity $sip -PolicyName $user.ThirdPartyVideoSystemPolicy.toString()
+                    }
                 }
                 catch
                 {
@@ -166,7 +191,9 @@ Function ResetUserData () {
                 }
                 try
                 {
+                    if ($user.MobilityPolicy){
                     Grant-CsMobilityPolicy -Identity $sip -PolicyName $user.MobilityPolicy.toString()
+                    }
                 }
                 catch
                 {
@@ -174,7 +201,9 @@ Function ResetUserData () {
                 }
                 try
                 {
+                    if ($user.HostedVoicemailPolicy){
                     Grant-CsHostedVoicemailPolicy -Identity $sip -PolicyName $user.HostedVoicemailPolicy.toString()
+                    }
                 }
                 catch
                 {
@@ -182,7 +211,9 @@ Function ResetUserData () {
                 }
                 try
                 {
+                    if ($user.TeamsUpgradePolicy){
                     Grant-CsTeamsUpgradePolicy -Identity $sip -PolicyName $user.TeamsUpgradePolicy.toString()
+                    }
                 }
                 catch
                 {
@@ -190,7 +221,9 @@ Function ResetUserData () {
                 }
                  try
                 {
-                    Grant-CsIPPhonePolicy  -Identity $sip -PolicyName $user.IPPhonePolicy.toString()
+                    if ($user.IPPhonePolicy){
+                        Grant-CsIPPhonePolicy  -Identity $sip -PolicyName $user.IPPhonePolicy.toString()
+                    }
                 }
                 catch
                 {
@@ -198,12 +231,14 @@ Function ResetUserData () {
                 }
                  try
                 {
-                    Set-CsUser –Identity $sip –LineUri $user.LineUri.toString() -EnterpriseVoiceEnabled $user.EnterpriseVoiceEnabled
+                        
+                        Set-CsUser –Identity $sip –LineUri $user.LineUri.toString() -EnterpriseVoiceEnabled $user.EnterpriseVoiceEnabled     
                 }
                 catch
                 {
                     Set-CsUser –Identity $user.SipAddress.ToString() –LineUri $user.LineUri.toString() -EnterpriseVoiceEnabled $user.EnterpriseVoiceEnabled
                 }
+            Write-Host "Finish Restoring Policies" -ForegroundColor White -BackgroundColor Green
             Write-Host "-------------------------- USER DETAILS[AFTER] --------------------------"
             Get-csuser -Identity $identity
             Write-Host "-------------------------- USER DETAILS[AFTER] --------------------------"
@@ -217,10 +252,11 @@ Function ResetUserData () {
     }
 }
 
+
 ##--!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
 ##--SPECIFY the group of users Where the script will be executed
 ##--!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
-$allusers = Get-CsUser
+$allusers = Get-CsUser -Identity tiroxo@uc-pm.net
 Write-Host $allusers.count " Users found to be processed on this list"  -ForegroundColor Red -BackgroundColor Yellow
 [void](Read-Host 'Press Enter to Start…')
 Foreach ($id in $allusers){
