@@ -1,7 +1,7 @@
 ## ------------------------------------------
 ##
 ##Script: ResetUserData Script 
-##Version: V1.2
+##Version: V2
 ##Author: Tiago Roxo
 ##
 ## ------------------------------------------
