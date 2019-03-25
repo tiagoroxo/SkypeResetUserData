@@ -1,12 +1,47 @@
 ## ------------------------------------------
 ##
 ##Script: ResetUserData Script 
-##Version: V3
+##Version: V4
 ##Author: Tiago Roxo
 ##
 ## ------------------------------------------
 
 Clear-Host
+
+Function SkypeResetUserData () {
+    #USERS MENU
+    do{
+    Clear-Host
+    Write-Host "Choose a valid option:" -ForegroundColor White -BackgroundColor DarkGreen
+    Write-Host "[1]Import users from file"
+    Write-Host "[2]Import users frim Get-CsUser"
+    $input = Read-Host 'Type...'
+    }while (($input -notmatch 1) -and ($input -notmatch 2))
+        
+    #USERS FILTER
+    if($input -eq 1){
+
+        $FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ 
+            InitialDirectory = [Environment]::GetFolderPath("Desktop") 
+        }
+        $null = $FileBrowser.ShowDialog()
+        $allusers = Get-Content $FileBrowser.FileName.ToString()
+
+    }else{
+        $allusers = Get-CsUser
+    }
+
+    #WORK
+    Write-Host $allusers.count " Users found to be processed on this list"  -ForegroundColor Red -BackgroundColor Yellow
+    [void](Read-Host 'Press Enter to Start… or CTRL+C to Cancel')
+    Foreach ($id in $allusers){
+            ResetUserData -identity $id
+    }
+    ##--Opens the Folder where the backups were saved.
+    explorer.exe $($folder)
+    Write-Host $allusers.count " Users analysed and proccessed."  -ForegroundColor White -BackgroundColor Green
+        
+}
 
 ##-- FUNCTION START
 Function ResetUserData () {
@@ -254,22 +289,4 @@ Function ResetUserData () {
 }
 
 
-##--!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
-##--SPECIFY the group of users Where the script will be executed
-##--!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
-##uncomment one of the below methods
-#$allusers = Get-CsUser
-#or
-$allusers = Get-Content C:\temp\users.txt
-
-    Write-Host $allusers.count " Users found to be processed on this list"  -ForegroundColor Red -BackgroundColor Yellow
-    [void](Read-Host 'Press Enter to Start…')
-    Foreach ($id in $allusers){
-         ResetUserData -identity $id
-    }
-    ##--Opens the Folder where the backups were saved.
-    explorer.exe $($folder)
-    Write-Host $allusers.count " Users analysed and proccessed."  -ForegroundColor White -BackgroundColor Green
-
-
-
+SkypeResetUserData
