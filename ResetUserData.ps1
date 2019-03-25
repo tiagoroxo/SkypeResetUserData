@@ -1,7 +1,7 @@
 ## ------------------------------------------
 ##
 ##Script: ResetUserData Script 
-##Version: V2
+##Version: V3
 ##Author: Tiago Roxo
 ##
 ## ------------------------------------------
@@ -25,6 +25,7 @@ Function ResetUserData () {
     $second = (get-date).Second
     
     ##--Create folder
+    ##https://www.sapien.com/blog/2018/03/22/storing-powershell-variables-in-external-files/
     $folder = "C:\UserDataBackup\"
     if( -Not (Test-Path -Path $folder ) )
     {
@@ -256,12 +257,19 @@ Function ResetUserData () {
 ##--!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
 ##--SPECIFY the group of users Where the script will be executed
 ##--!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!
-$allusers = Get-CsUser
-Write-Host $allusers.count " Users found to be processed on this list"  -ForegroundColor Red -BackgroundColor Yellow
-[void](Read-Host 'Press Enter to Start…')
-Foreach ($id in $allusers){
-     ResetUserData -identity $id
-}
-##--Opens the Folder where the backups were saved.
-explorer.exe $($folder)
-Write-Host $allusers.count " Users analysed and proccessed."  -ForegroundColor White -BackgroundColor Green
+##uncomment one of the below methods
+#$allusers = Get-CsUser
+#or
+$allusers = Get-Content C:\temp\users.txt
+
+    Write-Host $allusers.count " Users found to be processed on this list"  -ForegroundColor Red -BackgroundColor Yellow
+    [void](Read-Host 'Press Enter to Start…')
+    Foreach ($id in $allusers){
+         ResetUserData -identity $id
+    }
+    ##--Opens the Folder where the backups were saved.
+    explorer.exe $($folder)
+    Write-Host $allusers.count " Users analysed and proccessed."  -ForegroundColor White -BackgroundColor Green
+
+
+
